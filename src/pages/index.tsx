@@ -7,13 +7,17 @@ import { SigninButton } from "src/components/SigninButton";
 const btn = "bg-slate-600 p-2 text-white dark:bg-gray-200 dark:text-black m-2";
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }], { refetchOnWindowFocus: false });
 
-  const { data: singleReplay } = trpc.useQuery(["replay.replayId", { id: "cl62chuzx004754uij78qx33o" }]);
+  const { data: singleReplay } = trpc.useQuery(["replay.replayId", { id: "cl62chuzx004754uij78qx33o" }], {
+    refetchOnWindowFocus: false,
+  });
 
-  const { data: singleNotexistingReplay } = trpc.useQuery(["replay.replayId", { id: "kek" }]);
+  const { data: singleNotexistingReplay } = trpc.useQuery(["replay.replayId", { id: "kek" }], {
+    refetchOnWindowFocus: false,
+  });
 
-  const { data: replays } = trpc.useQuery(["replay.getAll"]);
+  const { data: replays } = trpc.useQuery(["replay.getAll"], { refetchOnWindowFocus: false });
   console.table(singleReplay);
 
   return (
