@@ -5,15 +5,18 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import PlausibleProvider from "next-plausible";
 import "../styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
-    <SessionProvider session={session}>
-      <ThemeProvider attribute="class">
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </SessionProvider>
+    <PlausibleProvider domain="botgame.andyfx.net">
+      <SessionProvider session={session}>
+        <ThemeProvider attribute="class">
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </SessionProvider>
+    </PlausibleProvider>
   );
 };
 

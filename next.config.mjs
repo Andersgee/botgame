@@ -1,8 +1,7 @@
 import { env } from "./src/env/server.mjs";
 
 /**
- * Don't be scared of the generics here.
- * All they do is to give us autocompletion when using this.
+ * Provide autocompletion for config.
  *
  * @template {import('next').NextConfig} T
  * @param {T} config - A generic parameter that flows through to the return type
@@ -15,6 +14,7 @@ function defineNextConfig(config) {
 export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
+  optimizeFonts: true,
   experimental: {
     newNextLinkBehavior: true, // next/link no longer requires adding <a> as a child. Will be default in Next.js 13.
   },
