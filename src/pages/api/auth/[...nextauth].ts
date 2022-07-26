@@ -12,13 +12,18 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
-  // Include user.id on session
+
   callbacks: {
+    // Include user.id on session
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
       }
       return session;
+    },
+    //The redirect callback is called anytime the user is redirected to a callback URL (e.g. on signin or signout).
+    redirect({ url, baseUrl }) {
+      return baseUrl;
     },
   },
   // Configure one or more authentication providers
