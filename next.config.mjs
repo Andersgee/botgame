@@ -15,4 +15,7 @@ function defineNextConfig(config) {
 export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    newNextLinkBehavior: true, // next/link no longer requires adding <a> as a child. Will be default in Next.js 13.
+  },
 });
