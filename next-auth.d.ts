@@ -1,6 +1,6 @@
-import { DefaultSession } from "next-auth";
+import { DefaultSession } from "next-auth/core/types";
 
-declare module "next-auth" {
+declare module "next-auth/" {
   /**
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */

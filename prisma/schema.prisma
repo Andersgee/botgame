@@ -3,16 +3,27 @@
 
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-    provider = "sqlite" // NOTE: sqlite does not work with NextAuth.js
+    provider = "mysql" // NOTE: sqlite does not work with NextAuth.js
     url      = env("DATABASE_URL")
+    referentialIntegrity = "prisma"
 }
 
 model Example {
     id String @id @default(cuid())
+    text String
 }
+
+model Replay {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    info Json
+    data Json
+}
+
 
 // Necessary for Next auth
 model Account {

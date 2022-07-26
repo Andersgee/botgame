@@ -1,7 +1,12 @@
 import React from "react";
 import { useTheme } from "next-themes";
 
-export function ThemeToggleButton(props: { className?: string; children: React.ReactNode }) {
+type Props = {
+  className?: string;
+  children: React.ReactNode;
+};
+
+export function ThemeToggleButton(props: Props) {
   const { resolvedTheme, setTheme } = useTheme();
   const toggleTheme = () => {
     if (resolvedTheme === "light") {
