@@ -48,9 +48,11 @@ const Home: NextPage = () => {
           laboriosam quibusdam! Soluta reprehenderit ratione ut dicta voluptatem facilis eveniet omnis molestiae,
           sapiente distinctio sit laudantium velit iste corporis, temporibus fugiat vero.
         </p>
+
+        <h3>profiles</h3>
+        {profiles && <ProfileTable profiles={profiles} />}
         <h3>replays</h3>
         {replays && <ReplayTable replays={replays} />}
-        {profiles && <ProfileTable profiles={profiles} />}
       </main>
     </>
   );

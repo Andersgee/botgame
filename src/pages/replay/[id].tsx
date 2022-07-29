@@ -37,8 +37,11 @@ const Page: NextPage<Props> = ({ replay }) => {
       />
       <main className="relative">
         <Viewer replay={replay} />
-        <div className="absolute top-[-1px] left-0">
-          <Link href="/" className="bg-red-400">
+        <div className="absolute top-0 left-0">
+          <Link
+            href="/"
+            className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
+          >
             Home
           </Link>
         </div>

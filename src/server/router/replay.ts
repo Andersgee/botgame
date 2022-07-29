@@ -57,7 +57,7 @@ export const replayRouter = createRouter()
     async resolve({ ctx, input }) {
       const profileId = input?.profileId;
       if (!profileId) return null;
-      return await ctx.prisma.replaysOnProfiles.findMany({
+      const replaysOnProfiles = await ctx.prisma.replaysOnProfiles.findMany({
         where: { profileId },
         orderBy: [
           {
@@ -78,6 +78,7 @@ export const replayRouter = createRouter()
           },
         },
       });
+      return replaysOnProfiles.map((rop) => rop.replay);
     },
   })
   .query("get-all", {
