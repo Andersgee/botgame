@@ -9,11 +9,11 @@ const btn = "bg-slate-600 p-2 text-white dark:bg-gray-200 dark:text-black m-2";
 const Home: NextPage = () => {
   const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }], { refetchOnWindowFocus: false });
 
-  const { data: singleReplay } = trpc.useQuery(["replay.replayId", { id: "cl62chuzx004754uij78qx33o" }], {
+  const { data: singleReplay } = trpc.useQuery(["replay.replayId", { id: 4 }], {
     refetchOnWindowFocus: false,
   });
 
-  const { data: singleNotexistingReplay } = trpc.useQuery(["replay.replayId", { id: "kek" }], {
+  const { data: singleNotexistingReplay } = trpc.useQuery(["replay.replayId", { id: 999 }], {
     refetchOnWindowFocus: false,
   });
 
@@ -42,7 +42,7 @@ const Home: NextPage = () => {
           sapiente distinctio sit laudantium velit iste corporis, temporibus fugiat vero.
         </p>
 
-        <h2>{hello.data ? hello.data.greeting : "Loading..."}</h2>
+        <h2 className="font-light">{hello.data ? hello.data.greeting : "Loading..."}</h2>
 
         <h3>replays</h3>
         <p className="break-words">{JSON.stringify(replays)}</p>

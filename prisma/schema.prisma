@@ -2,28 +2,20 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
     previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-    provider = "mysql" // NOTE: sqlite does not work with NextAuth.js
-    url      = env("DATABASE_URL")
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
     referentialIntegrity = "prisma"
 }
 
 model Example {
-    id String @id @default(cuid())
+    id   String @id @default(cuid())
     text String
 }
-
-model Replay {
-    id String @id @default(cuid())
-    createdAt DateTime @default(now())
-    info Json
-    data Json
-}
-
 
 // Necessary for Next auth
 model Account {
@@ -68,4 +60,30 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+//relation tables https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#relation-tables
+
+model Replay {
+    id        Int              @id @default(autoincrement())
+    createdAt DateTime         @default(now())
+    users     ReplaysOnUsers[]
+    winnerId  String
+    info      Json
+    data      Json
+}
+
+model Debuguser {
+    id      String           @id @default(cuid())
+    name    String?
+    replays ReplaysOnUsers[]
+}
+
+model ReplaysOnUsers {
+    replay   Replay    @relation(fields: [replayId], references: [id])
+    replayId Int
+    user     Debuguser @relation(fields: [userId], references: [id])
+    userId   String
+
+    @@id([replayId, userId])
 }
