@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { SerializableReplay } from "src/pages/replay/[id]";
+import type { Replay } from "src/pages/replay/[id]";
 import { ABILITY, ENTITY, ENTITY_ATTRIBUTES } from "src/game/constants";
 import { EntityNumbers, CommandNumbers, Entity, entityFromNumbers, isEntityType } from "src/game/entity";
 import { useEventListener } from "usehooks-ts";
@@ -10,7 +10,7 @@ type ReplayData = [commands: CommandNumbers[], entitynumbers: EntityNumbers[]][]
 
 type Props = {
   className?: string;
-  replay: SerializableReplay;
+  replay: Replay;
 };
 
 const ABILITYCOLOR = new Map([
@@ -21,6 +21,8 @@ const ABILITYCOLOR = new Map([
   [ABILITY.REGEN, "#0ff"],
   [ABILITY.BUILD, "#f0f"],
 ]);
+
+const SCROLL_ZOOM_SPEED = 1 / 1000;
 
 const abilityColor = (i?: number) => (i ? ABILITYCOLOR.get(i) || "#ccc" : "#ccc");
 
@@ -37,7 +39,7 @@ const factorFromZoom = (zoom: number) => 16 / Math.pow(2, zoom);
 
 export function Viewer(props: Props) {
   //maybe validate that data is array and the each element has an array in element[0] and at element[1]
-  const data = props.replay.data as ReplayData;
+  const data = props.replay.replayData?.data as ReplayData;
   const maxTicks = data.length - 1;
 
   const [tick, setTick] = useState(0);
@@ -102,7 +104,7 @@ export function Viewer(props: Props) {
   });
 
   useEventListener("wheel", (e) => {
-    setZoom((prev) => clamp(prev + e.deltaY / 1000, 2, 10));
+    setZoom((prev) => clamp(prev - e.deltaY * SCROLL_ZOOM_SPEED, 2, 10));
   });
 
   useEventListener("mousemove", (e) => {

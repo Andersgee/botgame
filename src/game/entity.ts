@@ -55,6 +55,16 @@ export function newEntity(id: number, type: ENTITY, owner: number, pos: Pos): En
   };
 }
 
+/** return a key that is not already in state. note: this key is NOT unique across the entire game. */
+export function newEntityId(state: Map<number, Entity>) {
+  for (let k = 0; k < state.size + 1; k++) {
+    if (!state.has(k)) {
+      return k;
+    }
+  }
+  return 0;
+}
+
 export function newEntityNumbers(id: number, type: ENTITY, owner: number, pos: Pos) {
   return numbersFromEntity(newEntity(id, type, owner, pos));
 }

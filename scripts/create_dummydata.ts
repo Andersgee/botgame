@@ -10,19 +10,42 @@ import { prisma } from "../src/server/db/client";
  yarn tsnode ./scripts/create_dummydata.ts
 */
 
-async function create_dummydata() {
-  //const msg = await create_users()
+async function main() {
+  //await clear_entire_db();
+  //await create_users();
+  //const msg = await create_profiles();
   const replayId = await create_replay();
 }
 
+async function clear_entire_db() {
+  //there has to be a single command right?...
+  await prisma.user.deleteMany({});
+  await prisma.profile.deleteMany({});
+  await prisma.replay.deleteMany({});
+  await prisma.replaysOnProfiles.deleteMany({});
+  await prisma.replayData.deleteMany({});
+}
+
 async function create_users() {
-  const data = [{ name: "allan" }, { name: "bertil" }];
-  return await prisma.debuguser.createMany({ data });
+  const data = [
+    { name: "allan", email: "some@email.com" },
+    { name: "bertil", email: "" },
+  ];
+  return await prisma.user.createMany({ data });
+}
+
+async function create_profiles() {
+  const data = [
+    { name: "allans-main", bio: "", userId: "cl66v4iw10000cwuiqknyhkx8" },
+    { name: "allans-extraalt", bio: "", userId: "cl66v4iw10000cwuiqknyhkx8" },
+    { name: "bertil", bio: "", userId: "cl66v4iw10001cwuin1a14mt4" },
+  ];
+  return await prisma.profile.createMany({ data });
 }
 
 async function create_replay() {
-  const player1Id = "cl63t5znh00007lui0xizyz6s"; //allan
-  const player2Id = "cl63t5znh00017lui0ws4f8lp"; //bertil
+  const player1Id = 7; //allan
+  const player2Id = 8; //bertil
 
   const playerIds = [player1Id, player2Id];
   const winnerId = player1Id;
@@ -284,28 +307,35 @@ const tenstepreplaydata = [
  */
 async function saveReplay(
   replaydata: number[][][][],
-  playerIds: string[],
-  winnerId: string,
+  playerIds: number[],
+  winningProfileId: number,
   replayinfo: Record<string, string | number>,
 ) {
   //create a replay
   const r = await prisma.replay.create({
     data: {
-      winnerId: winnerId,
-      info: replayinfo,
-      data: replaydata,
+      winningProfileId: winningProfileId,
+      gameLength: replaydata.length,
     },
   });
 
-  //create relations that connects the (now existing) replay to multiple (already existing) users
-  const rels = await prisma.replaysOnUsers.createMany({
+  //create a replaydata and connect it to replay
+  const r2 = await prisma.replayData.create({
+    data: {
+      data: replaydata,
+      replayId: r.id,
+    },
+  });
+
+  //create multiple replaysOnUsers that relates each user to replay
+  const rels = await prisma.replaysOnProfiles.createMany({
     data: playerIds.map((playerId) => ({
       replayId: r.id,
-      userId: playerId,
+      profileId: playerId,
     })),
   });
 
   return r.id;
 }
 
-create_dummydata();
+main();

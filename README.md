@@ -20,7 +20,8 @@ yarn dev
 ```bash
 yarn prisma studio
 #or
-pscale shell botgame main
+pscale shell botgame dev
+#pscale shell botgame main
 ```
 
 ## sync database with prisma schema

@@ -1,4 +1,5 @@
 import { env } from "./src/env/server.mjs";
+import { withSuperjson } from "next-superjson";
 
 /**
  * Provide autocompletion for config.
@@ -11,11 +12,13 @@ function defineNextConfig(config) {
   return config;
 }
 
-export default defineNextConfig({
-  reactStrictMode: true,
-  swcMinify: true,
-  optimizeFonts: true,
-  experimental: {
-    newNextLinkBehavior: true, // next/link no longer requires adding <a> as a child. Will be default in Next.js 13.
-  },
-});
+export default withSuperjson()(
+  defineNextConfig({
+    reactStrictMode: true,
+    swcMinify: true,
+    optimizeFonts: true,
+    experimental: {
+      newNextLinkBehavior: true, // next/link no longer requires adding <a> as a child. Will be default in Next.js 13.
+    },
+  }),
+);

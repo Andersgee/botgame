@@ -2,10 +2,9 @@ import { useTheme } from "next-themes";
 
 type Props = {
   className?: string;
-  children: React.ReactNode;
 };
 
-export function ThemeToggleButton(props: Props) {
+export function ThemeToggleButton({ className }: Props) {
   const { resolvedTheme, setTheme } = useTheme();
   const toggleTheme = () => {
     if (resolvedTheme === "light") {
@@ -16,8 +15,12 @@ export function ThemeToggleButton(props: Props) {
   };
   //console.log("theme:", theme);
   return (
-    <button onClick={toggleTheme} className={` ${props.className}`} aria-label="Toggle theme">
-      {props.children}
+    <button
+      aria-label="Toggle theme"
+      onClick={toggleTheme}
+      className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
+    >
+      Theme
     </button>
   );
 }
