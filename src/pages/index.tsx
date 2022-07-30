@@ -1,22 +1,25 @@
-import type { NextPage } from "next";
-import { trpc } from "../utils/trpc";
-import { ThemeToggleButton } from "../components/ThemeToggleButton";
-import { SigninButton } from "src/components/SigninButton";
+import type { NextPage, GetStaticPaths, GetStaticProps } from "next";
+import { inferQueryOutput, trpc } from "../utils/trpc";
 import { ReplayTable } from "src/components/ReplayTable";
 import { ProfileTable } from "src/components/ProfileTable";
 import { Head } from "src/components/Head";
 import { Nav } from "src/components/Nav";
 import { UserTable } from "src/components/UserTable";
+import { prisma } from "src/server/db/client";
+
+type Profiles = NonNullable<inferQueryOutput<"profile.get-all">>;
+type Replays = NonNullable<inferQueryOutput<"replay.get-all">>;
+type Users = NonNullable<inferQueryOutput<"user.get-all">>;
 
 const btn = "bg-slate-600 p-2 text-white dark:bg-gray-200 dark:text-black m-2";
 
-const Home: NextPage = () => {
-  const { data: replays } = trpc.useQuery(["replay.get-all"], { refetchOnWindowFocus: false });
+type Props = {
+  profiles: Profiles;
+  replays: Replays;
+  users: Users;
+};
 
-  const { data: profiles } = trpc.useQuery(["profile.get-all"], { refetchOnWindowFocus: false });
-
-  const { data: users } = trpc.useQuery(["user.get-all"], { refetchOnWindowFocus: false });
-
+const Home: NextPage<Props> = ({ profiles, replays, users }) => {
   return (
     <>
       <Head
@@ -38,16 +41,46 @@ const Home: NextPage = () => {
           sapiente distinctio sit laudantium velit iste corporis, temporibus fugiat vero.
         </p>
 
-        <h3>replays</h3>
-        {replays && <ReplayTable replays={replays} />}
-        <h3>bots</h3>
-        {profiles && <ProfileTable profiles={profiles} />}
-
         <h3>users</h3>
-        {users && <UserTable users={users} />}
+        <UserTable users={users} />
+        <h3>bots</h3>
+        <ProfileTable profiles={profiles} />
+        <h3>replays</h3>
+        <ReplayTable replays={replays} />
       </main>
     </>
   );
 };
 
 export default Home;
+
+///////////////////////////////////////
+
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const profiles = await prisma.profile.findMany({
+      include: {
+        user: true,
+      },
+    });
+    const replays = await prisma.replay.findMany({
+      include: {
+        profiles: {
+          include: {
+            profile: true,
+          },
+        },
+      },
+    });
+
+    const users = await prisma.user.findMany();
+
+    const props: Props = { profiles, replays, users };
+    return {
+      props,
+      revalidate: 10, //at most once every 10 seconds
+    };
+  } catch (error) {
+    return { notFound: true };
+  }
+};
