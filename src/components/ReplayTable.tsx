@@ -1,39 +1,67 @@
 import { format } from "date-fns";
-import Link from "next/link";
-import { hashidFromNumber } from "src/utils/hashids";
 import { inferQueryOutput } from "src/utils/trpc";
+import { IdLink } from "./IdLink";
 
-type Replays = NonNullable<inferQueryOutput<"replay.get-all">>;
+type Replay = NonNullable<inferQueryOutput<"replay.get-by-id">>;
 
 type Props = {
-  className?: string;
-  replays: Replays;
+  replays: Replay[];
 };
 
-export function ReplayTable({ className, replays }: Props) {
+export function ReplayTable({ replays }: Props) {
   return (
-    <div className={className}>
-      {replays.map((replay) => {
-        const id = replay.id;
-        const date = replay.createdAt;
-        const profiles = replay.profiles;
-        const versusString = profiles.map(({ profile }) => profile.name).join(" vs ");
+    <table className="bg-neutral-100 dark:bg-neutral-800 border-separate border-spacing-3">
+      <thead>
+        <tr className="border-b-2 border-neutral-600 dark:border-neutral-400">
+          <th>players</th>
+          <th>played at</th>
+          <th>link</th>
+        </tr>
+      </thead>
+      <tbody>{replays.map(TableRow)}</tbody>
+    </table>
+  );
+}
 
-        const winnerUser = replay.profiles.find(({ profile }) => profile.id === replay.winningProfileId);
-        const winnerName = winnerUser?.profile.name;
+function TableRow(replay: Replay) {
+  const id = replay.id;
+  const date = replay.createdAt;
+  const profiles = replay.profiles;
+  const versusString = profiles.map(({ profile }) => profile.name).join(" vs ");
 
-        return (
-          <div key={id} className="flex gap-2 p-2 items-baseline">
-            <div>{format(date, "yyyy-MM-dd (mm:ss)")}</div>
-            <div>winner: {winnerName}</div>
-            <div>{versusString}</div>
+  const winnerUser = replay.profiles.find(({ profile }) => profile.id === replay.winningProfileId);
+  const winnerName = winnerUser?.profile.name;
 
-            <Link className="bg-slate-500 p-2" href={`/replay/${hashidFromNumber(id)}`}>
-              watch
-            </Link>
-          </div>
-        );
-      })}
-    </div>
+  return (
+    <tr className="border-b-2 border-neutral-500 dark:border-neutral-500">
+      <td>
+        {profiles.map((profile) => {
+          const id = profile.profile.id;
+          const name = profile.profile.name;
+          const isWinner = id === replay.winningProfileId;
+
+          return (
+            <div key={id}>
+              <IdLink className="hover:opacity-60" href="/profile/" id={id}>
+                <span
+                  className={`w-6 text-center text-sm inline-block font-bold ${
+                    isWinner ? "text-green-500" : "text-red-600"
+                  }`}
+                >
+                  {isWinner ? "W" : " "}
+                </span>
+                <span className="ml-1">{name}</span>
+              </IdLink>
+            </div>
+          );
+        })}
+      </td>
+      <td>{format(date, "yyyy-MM-dd (hh:ss)")}</td>
+      <td>
+        <IdLink href="/replay/" id={id}>
+          <div className="hover:opacity-60">watchicon</div>
+        </IdLink>
+      </td>
+    </tr>
   );
 }
