@@ -13,17 +13,17 @@ import { prisma } from "../src/server/db/client";
 async function main() {
   //await clear_entire_db();
   //await create_users();
-  //const msg = await create_profiles();
+  //const msg = await create_bots();
   const replayId = await create_replay();
 }
 
 async function clear_entire_db() {
   //there has to be a single command right?...
-  await prisma.user.deleteMany({});
-  await prisma.profile.deleteMany({});
-  await prisma.replay.deleteMany({});
-  await prisma.replaysOnProfiles.deleteMany({});
-  await prisma.replayData.deleteMany({});
+  await prisma.replayData.deleteMany();
+  await prisma.replay.deleteMany();
+  await prisma.bot.deleteMany();
+  await prisma.replaysOnBots.deleteMany();
+  await prisma.user.deleteMany();
 }
 
 async function create_users() {
@@ -34,25 +34,21 @@ async function create_users() {
   return await prisma.user.createMany({ data });
 }
 
-async function create_profiles() {
+async function create_bots() {
   const data = [
-    { name: "allans-main", bio: "", userId: "cl66v4iw10000cwuiqknyhkx8" },
-    { name: "allans-extraalt", bio: "", userId: "cl66v4iw10000cwuiqknyhkx8" },
-    { name: "bertil", bio: "", userId: "cl66v4iw10001cwuin1a14mt4" },
+    { name: "allans-main", bio: "", userId: "cl688dil70000teui76vk2ghm" },
+    { name: "allans-extraalt", bio: "", userId: "cl688dil70000teui76vk2ghm" },
+    { name: "bertil", bio: "", userId: "cl688dil70001teuigym10vja" },
   ];
-  return await prisma.profile.createMany({ data });
+  return await prisma.bot.createMany({ data });
 }
 
 async function create_replay() {
-  const player1Id = 7; //allan
-  const player2Id = 8; //bertil
-
-  const playerIds = [player1Id, player2Id];
-  const winnerId = player1Id;
   const replaydata = tenstepreplaydata;
-  const info = { turns: 10 }; //some info here...
+  const botIds = [1, 3];
+  const winnerId = 1;
 
-  const id = await saveReplay(replaydata, playerIds, winnerId, info);
+  const id = await saveReplay(replaydata, botIds, winnerId);
   return id;
 }
 
@@ -305,16 +301,11 @@ const tenstepreplaydata = [
  *
  * Return the created replay id.
  */
-async function saveReplay(
-  replaydata: number[][][][],
-  playerIds: number[],
-  winningProfileId: number,
-  replayinfo: Record<string, string | number>,
-) {
+async function saveReplay(replaydata: number[][][][], botIds: number[], winningBotId: number) {
   //create a replay
   const r = await prisma.replay.create({
     data: {
-      winningProfileId: winningProfileId,
+      winningBotId: winningBotId,
       gameLength: replaydata.length,
     },
   });
@@ -328,10 +319,10 @@ async function saveReplay(
   });
 
   //create multiple replaysOnUsers that relates each user to replay
-  const rels = await prisma.replaysOnProfiles.createMany({
-    data: playerIds.map((playerId) => ({
+  const rels = await prisma.replaysOnBots.createMany({
+    data: botIds.map((botId) => ({
       replayId: r.id,
-      profileId: playerId,
+      botId: botId,
     })),
   });
 

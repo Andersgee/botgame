@@ -26,23 +26,23 @@ export function ReplayTable({ replays }: Props) {
 function TableRow(replay: Replay) {
   const id = replay.id;
   const date = replay.createdAt;
-  const profiles = replay.profiles;
-  const versusString = profiles.map(({ profile }) => profile.name).join(" vs ");
+  const bots = replay.bots;
+  const versusString = bots.map(({ bot }) => bot.name).join(" vs ");
 
-  const winnerUser = replay.profiles.find(({ profile }) => profile.id === replay.winningProfileId);
-  const winnerName = winnerUser?.profile.name;
+  const winnerUser = replay.bots.find(({ bot }) => bot.id === replay.winningBotId);
+  const winnerName = winnerUser?.bot.name;
 
   return (
     <tr className="border-b-2 border-neutral-500 dark:border-neutral-500">
       <td>
-        {profiles.map((profile) => {
-          const id = profile.profile.id;
-          const name = profile.profile.name;
-          const isWinner = id === replay.winningProfileId;
+        {bots.map((bot) => {
+          const id = bot.bot.id;
+          const name = bot.bot.name;
+          const isWinner = id === replay.winningBotId;
 
           return (
             <div key={id}>
-              <IdLink className="hover:opacity-60" href="/profile/" id={id}>
+              <IdLink className="hover:opacity-60" href="/bot/" id={id}>
                 <span
                   className={`w-6 text-center text-sm inline-block font-bold ${
                     isWinner ? "text-green-500" : "text-red-600"

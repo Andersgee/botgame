@@ -44,17 +44,6 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    profiles      Profile[]
-}
-
 model VerificationToken {
     identifier String
     token      String   @unique
@@ -63,42 +52,55 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    //app
+    bots          Bot[]
+    intId         Int       @unique @default(autoincrement())
+}
+
 // application
 
-model Profile {
-    id           Int                 @id @default(autoincrement())
-    createdAt    DateTime            @default(now())
-    name         String
-    bio          String
-    user         User                @relation(fields: [userId], references: [id])
-    userId       String
-    replays      ReplaysOnProfiles[]
-    ProfileStats ProfileStats?
+model Bot {
+    id        Int             @id @default(autoincrement())
+    createdAt DateTime        @default(now())
+    name      String
+    bio       String
+    user      User            @relation(fields: [userId], references: [id])
+    userId    String
+    replays   ReplaysOnBots[]
+    botStats  BotStats?
 }
 
 model Replay {
-    id               Int                 @id @default(autoincrement())
-    createdAt        DateTime            @default(now())
-    replayData       ReplayData?
-    profiles         ReplaysOnProfiles[]
-    winningProfileId Int?
-    gameLength       Int?
+    id           Int             @id @default(autoincrement())
+    createdAt    DateTime        @default(now())
+    replayData   ReplayData?
+    bots         ReplaysOnBots[]
+    winningBotId Int?
+    gameLength   Int?
 }
 
 //relation tables https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#relation-tables
-model ReplaysOnProfiles {
-    replay    Replay  @relation(fields: [replayId], references: [id])
-    replayId  Int
-    profile   Profile @relation(fields: [profileId], references: [id])
-    profileId Int
+model ReplaysOnBots {
+    replay   Replay @relation(fields: [replayId], references: [id])
+    replayId Int
+    bot      Bot    @relation(fields: [botId], references: [id])
+    botId    Int
 
-    @@id([replayId, profileId])
+    @@id([replayId, botId])
 }
 
-model ProfileStats {
-    id          Int     @id @default(autoincrement())
-    profile     Profile @relation(fields: [profileId], references: [id])
-    profileId   Int     @unique
+model BotStats {
+    id          Int @id @default(autoincrement())
+    bot         Bot @relation(fields: [botId], references: [id])
+    botId       Int @unique
     wins        Int
     losses      Int
     draws       Int

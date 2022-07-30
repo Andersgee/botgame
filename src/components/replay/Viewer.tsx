@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Replay } from "src/pages/replay/[id]";
 import { ABILITY, ENTITY, ENTITY_ATTRIBUTES } from "src/game/constants";
 import { EntityNumbers, CommandNumbers, Entity, entityFromNumbers, isEntityType } from "src/game/entity";
 import { useEventListener } from "usehooks-ts";
 import { motion } from "framer-motion";
 import { useWindowSize } from "usehooks-ts";
+
+import type { Replay } from "src/pages/replay/[id]";
 
 type ReplayData = [commands: CommandNumbers[], entitynumbers: EntityNumbers[]][];
 

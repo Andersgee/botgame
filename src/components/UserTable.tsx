@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { inferQueryOutput } from "src/utils/trpc";
+import { IdLink } from "./IdLink";
 
 type User = NonNullable<inferQueryOutput<"user.get-by-id">>;
 
@@ -24,16 +25,15 @@ export function UserTable({ className, users }: Props) {
 }
 
 function TableRow(user: User) {
-  const id = user.id;
-  const name = user.name;
-  const email = user.email;
-  const image = user.image;
-
   return (
     <tr className="border-b-2 border-neutral-500 dark:border-neutral-500">
-      <td>{image && name && <img className="w-4 h-4" src={image} alt={name} />}</td>
-      <td>{name}</td>
-      <td>{email}</td>
+      <td>{user.image && <img className="w-4 h-4" src={user.image} alt={`profile avatar of ${user.name}`} />}</td>
+      <td>
+        <IdLink className="hover:opacity-60" href="/profile/" id={user.intId}>
+          {user.name}
+        </IdLink>
+      </td>
+      <td>{user.email}</td>
     </tr>
   );
 }

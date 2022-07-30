@@ -5,11 +5,24 @@ import { FallbackPage } from "src/components/FallbackPage";
 import { Head } from "src/components/Head";
 import { Viewer } from "src/components/replay/Viewer";
 import { prisma } from "src/server/db/client";
-import { getByIdWithDataQuery } from "src/server/router/replay";
 import { numberFromHashidparam } from "src/utils/hashids";
-import { inferQueryOutput } from "src/utils/trpc";
+import { inferAsyncReturnType } from "@trpc/server";
 
-export type Replay = NonNullable<inferQueryOutput<"replay.get-by-id-with-data">>;
+async function findreplay(id: number) {
+  return prisma.replay.findUnique({
+    where: { id },
+    include: {
+      bots: {
+        include: {
+          bot: true,
+        },
+      },
+      replayData: true,
+    },
+  });
+}
+
+export type Replay = NonNullable<inferAsyncReturnType<typeof findreplay>>;
 
 type Props = {
   replay: Replay;
@@ -22,11 +35,11 @@ const Page: NextPage<Props> = ({ replay }) => {
     return <FallbackPage />;
   }
 
-  const profileNames = replay.profiles.map(({ profile }) => profile.name);
+  const profileNames = replay.bots.map(({ bot }) => bot.name);
   const versusString = profileNames.join(" vs ");
 
-  const winningProfile = replay.profiles.find(({ profile }) => profile.id === replay.winningProfileId);
-  const winnerName = winningProfile?.profile.name;
+  const winningProfile = replay.bots.find(({ bot }) => bot.id === replay.winningBotId);
+  const winnerName = winningProfile?.bot.name;
   return (
     <>
       <Head
@@ -37,7 +50,7 @@ const Page: NextPage<Props> = ({ replay }) => {
       />
       <main className="relative">
         <Viewer replay={replay} />
-        <div className="absolute top-0 left-0">
+        <div className="absolute top-3 left-0">
           <Link
             href="/"
             className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
@@ -63,7 +76,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const id = numberFromHashidparam(params?.id);
     if (id == undefined) return { notFound: true };
 
-    const replay = await prisma.replay.findUnique(getByIdWithDataQuery(id));
+    const replay = await findreplay(id);
     if (!replay) return { notFound: true };
 
     const props: Props = { replay };

@@ -1,21 +1,5 @@
 import { createRouter } from "./context";
 import { z } from "zod";
-//import { prisma } from "src/server/db/client";
-
-/** extract this "object" to utility to use it elsewhere aka in getstaticprops */
-export const getByIdWithDataQuery = (id: number) => ({
-  where: { id },
-  include: {
-    profiles: {
-      include: {
-        profile: true,
-      },
-    },
-    replayData: true,
-  },
-});
-
-//type ReplaysOnProfilesFindManyQuery = Parameters<typeof prisma.replaysOnProfiles.findMany>[0];
 
 export const replayRouter = createRouter()
   .query("get-by-id", {
@@ -30,9 +14,9 @@ export const replayRouter = createRouter()
       return await ctx.prisma.replay.findUnique({
         where: { id },
         include: {
-          profiles: {
+          bots: {
             include: {
-              profile: true,
+              bot: true,
             },
           },
         },
@@ -48,20 +32,30 @@ export const replayRouter = createRouter()
     async resolve({ ctx, input }) {
       const id = input?.id;
       if (!id) return null;
-      return await ctx.prisma.replay.findUnique(getByIdWithDataQuery(id));
+      return await ctx.prisma.replay.findUnique({
+        where: { id },
+        include: {
+          bots: {
+            include: {
+              bot: true,
+            },
+          },
+          replayData: true,
+        },
+      });
     },
   })
-  .query("get-by-profileId", {
+  .query("get-by-botId", {
     input: z
       .object({
-        profileId: z.number().nullish(),
+        id: z.number().nullish(),
       })
       .nullish(),
     async resolve({ ctx, input }) {
-      const profileId = input?.profileId;
-      if (!profileId) return null;
-      const replaysOnProfiles = await ctx.prisma.replaysOnProfiles.findMany({
-        where: { profileId },
+      const id = input?.id;
+      if (!id) return null;
+      const replaysOnProfiles = await ctx.prisma.replaysOnBots.findMany({
+        where: { botId: id },
         orderBy: [
           {
             replay: {
@@ -72,9 +66,9 @@ export const replayRouter = createRouter()
         include: {
           replay: {
             include: {
-              profiles: {
+              bots: {
                 include: {
-                  profile: true,
+                  bot: true,
                 },
               },
             },
@@ -88,9 +82,9 @@ export const replayRouter = createRouter()
     async resolve({ ctx }) {
       return await ctx.prisma.replay.findMany({
         include: {
-          profiles: {
+          bots: {
             include: {
-              profile: true,
+              bot: true,
             },
           },
         },

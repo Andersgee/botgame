@@ -3,13 +3,13 @@ import { createRouter } from "./context";
 import superjson from "superjson";
 
 import { userRouter } from "./user";
-import { profileRouter } from "./profile";
+import { botRouter } from "./bot";
 import { replayRouter } from "./replay";
 
 export const appRouter = createRouter()
   .transformer(superjson)
   .merge("user.", userRouter)
-  .merge("profile.", profileRouter)
+  .merge("bot.", botRouter)
   .merge("replay.", replayRouter);
 
 // export type definition of API
