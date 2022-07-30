@@ -31,7 +31,7 @@ function TableRow(user: User) {
 
   return (
     <tr className="border-b-2 border-neutral-500 dark:border-neutral-500">
-      <td>{image && name && <img src={image} alt={name} />}</td>
+      <td>{image && name && <img className="w-4 h-4" src={image} alt={name} />}</td>
       <td>{name}</td>
       <td>{email}</td>
     </tr>
