@@ -17,7 +17,7 @@ interface Props {
   url: string;
   /**
    * the image shown when linking. should be large like 400?
-   * default to icon but important to not forget this one
+   * default to "/icons/andyfx-192x192.png" but important to not forget this one
    */
   imageUrl?: string;
   /**
@@ -30,6 +30,8 @@ interface Props {
    */
   twitter_label2?: string;
   twitter_data2?: string;
+  /** pwa related */
+  themeColor?: string;
 }
 
 /**
@@ -40,36 +42,23 @@ export function Head({
   description,
   domainUrl,
   url,
-  imageUrl = "/icons/icon-192x192.png",
+  imageUrl = "/icons/andyfx-192x192.png",
   twitter_label1 = "",
   twitter_data1 = "",
   twitter_label2 = "",
   twitter_data2 = "",
+  themeColor = "#A4D1F3",
 }: Props) {
-  //const url = "https://www.andyfx.se/";
-  /*
-  const imageUrl = `${domainUrl}${image}`;
-  const icon16 = `${domainUrl}/icons/icon-16x16.png`;
-  const icon32 = `${domainUrl}/icons/icon-32x32.png`;
-  const manifest = `${domainUrl}/manifest.json`;
-*/
-  const icon16 = `/icons/icon-16x16.png`;
-  const icon32 = `/icons/icon-32x32.png`;
-  const manifest = `/manifest.json`;
-
-  const themeColor = "#A2D1F1"; //control the browser theme?
-  //const keywords = "nextjs12 andynextstarter";
-
   return (
     <NextHead>
       <meta charSet="utf-8" />
-      <link rel="icon" href={icon16} type="image/png" sizes="16x16" />
-      <link rel="icon" href={icon32} type="image/png" sizes="32x32" />
+      <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+      <link rel="icon" type="image/png" href="/icons/favicon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="description" content={description} />
       <meta name="author" content="Anders Gustafsson" />
       <link rel="apple-touch-icon" href={imageUrl} />
-      <link rel="manifest" href={manifest} />
+      <link rel="manifest" href="/manifest.json" />
       <title>{title}</title>
 
       {/* pwa related? */}
