@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import { trpc } from "../utils/trpc";
 import { ThemeToggleButton } from "../components/ThemeToggleButton";
 import { SigninButton } from "src/components/SigninButton";
 import { ReplayTable } from "src/components/ReplayTable";
 import { ProfileTable } from "src/components/ProfileTable";
+import { Head } from "src/components/Head";
 
 const btn = "bg-slate-600 p-2 text-white dark:bg-gray-200 dark:text-black m-2";
 
@@ -29,11 +29,12 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Botgame</title>
-        <meta name="description" content="Botgame" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Head
+        title="Botgame"
+        description="code your bot to beat other bots"
+        domainUrl="https://botgame.andyfx.net"
+        url="https://botgame.andyfx.net"
+      />
 
       <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
         <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
