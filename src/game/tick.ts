@@ -133,7 +133,5 @@ function applyCommandNumbers(entityNumbersList: EntityNumbers[], commandNumbersL
 
   const updatedState = Array.from(updatedEntities).map(([id, entity]) => numbersFromEntity(entity));
 
-  //console.log(entities);
-  console.log(updatedEntities);
   return { updatedState, decisionNumbers: executedCommands };
 }

@@ -9,7 +9,6 @@ export function hashidFromNumber(n: number) {
 
 export function numberFromHashid(s: string) {
   const decoded = hashids.decode(s);
-  console.log("decoded:", decoded);
   return decoded[0] as number | undefined;
 }
 
@@ -23,13 +22,9 @@ export function stringFromParam(x: Param) {
  * essentially hashids.decode(params.id)
  */
 export function numberFromHashidparam(param: Param) {
-  console.log("process.env.HASHIDS_SALT:", process.env.HASHIDS_SALT);
-  console.log("numberFromHashidparam, param:", param);
   const str = stringFromParam(param);
-  console.log("str:", str);
   if (str === undefined) return undefined;
   const n = numberFromHashid(str);
-  console.log("n:", n);
   if (n == undefined) return undefined;
   return n;
 }

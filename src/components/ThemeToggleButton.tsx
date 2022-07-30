@@ -13,7 +13,7 @@ export function ThemeToggleButton({ className }: Props) {
       setTheme("light");
     }
   };
-  //console.log("theme:", theme);
+
   return (
     <button
       aria-label="Toggle theme"

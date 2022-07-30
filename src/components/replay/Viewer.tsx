@@ -251,7 +251,6 @@ export function TickRenderer(props: TickRendererProps) {
 
   return (
     <motion.svg
-      //onWheel={(e) => console.log(e)}
       className="absolute w-screen h-screen overflow-scroll bg-neutral-900"
       //viewBox={`-${width * 0.5} -${height * 0.5} ${width} ${height}`}
       viewBox={viewBoxString(props.zoom, width, height, props.center)}
@@ -317,7 +316,6 @@ function entityShape(
 
   const prevEntity = prevEntities.get(id) || entities.get(id);
   if (!prevEntity) {
-    console.log("no entity to move");
     //TODO: trigger spawn animation instead.
     return null;
   }
@@ -418,7 +416,6 @@ function abilityEnergizeShape(
   const entity = prevEntities.get(id) || entities.get(id);
   const targetEntity = prevEntities.get(targetId) || entities.get(targetId);
   if (!entity || !targetEntity) {
-    console.log("no entity or targetEntity");
     return null;
   }
 

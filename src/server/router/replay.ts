@@ -1,7 +1,8 @@
 import { createRouter } from "./context";
 import { z } from "zod";
+//import { prisma } from "src/server/db/client";
 
-/** extract this to function because use it in getstaticprops aswell */
+/** extract this "object" to utility to use it elsewhere aka in getstaticprops */
 export const getByIdWithDataQuery = (id: number) => ({
   where: { id },
   include: {
@@ -13,6 +14,8 @@ export const getByIdWithDataQuery = (id: number) => ({
     replayData: true,
   },
 });
+
+//type ReplaysOnProfilesFindManyQuery = Parameters<typeof prisma.replaysOnProfiles.findMany>[0];
 
 export const replayRouter = createRouter()
   .query("get-by-id", {
