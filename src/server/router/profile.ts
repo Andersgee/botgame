@@ -13,11 +13,18 @@ export const profileRouter = createRouter()
       if (!id) return null;
       return await ctx.prisma.profile.findUnique({
         where: { id },
+        include: {
+          user: true,
+        },
       });
     },
   })
   .query("get-all", {
     async resolve({ ctx }) {
-      return await ctx.prisma.profile.findMany();
+      return await ctx.prisma.profile.findMany({
+        include: {
+          user: true,
+        },
+      });
     },
   });
