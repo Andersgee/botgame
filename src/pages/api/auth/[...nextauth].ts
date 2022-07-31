@@ -10,7 +10,7 @@ import { env } from "src/env/server.mjs";
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/signin",
   },
 
   callbacks: {

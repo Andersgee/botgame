@@ -34,7 +34,7 @@ const Page: NextPage<Props> = ({ providers }: Props) => {
         title="Signin | Botgame"
         description="Sign in to Botgame"
         domainUrl="https://botgame.andyfx.net"
-        url="https://botgame.andyfx.net/auth/signin"
+        url="https://botgame.andyfx.net/signin"
       />
       <main className="mx-auto flex flex-col items-center justify-center h-screen p-4 bg-neutral-50">
         <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">Sign in</h1>

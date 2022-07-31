@@ -6,6 +6,8 @@ import { Head } from "src/components/Head";
 import { Nav } from "src/components/Nav";
 import { UserTable } from "src/components/UserTable";
 import { prisma } from "src/server/db/client";
+import { WarningModal } from "src/components/WarningModal";
+import { useState } from "react";
 
 type Bots = NonNullable<inferQueryOutput<"bot.get-all">>;
 type Replays = NonNullable<inferQueryOutput<"replay.get-all">>;
@@ -20,6 +22,7 @@ type Props = {
 };
 
 const Home: NextPage<Props> = ({ bots, replays, users }) => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Head
@@ -34,6 +37,15 @@ const Home: NextPage<Props> = ({ bots, replays, users }) => {
           C<span className="text-red-700">T3</span>A
         </h1>
         <p>just testing it out</p>
+        <WarningModal
+          active={open}
+          title="Delete Bot"
+          description="You will not be able to undo this."
+          confirmText="It was garbage"
+          onConfirm={() => setOpen(false)}
+          onCancel={() => setOpen(false)}
+          isLoading={false}
+        />
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore dolore deserunt rerum in praesentium saepe
           ipsa perferendis, vel quam dignissimos reiciendis amet maxime fuga, repudiandae voluptate porro accusamus
