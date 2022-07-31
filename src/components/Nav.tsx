@@ -15,6 +15,13 @@ export function Nav({ className }: Props) {
         Home
       </Link>
       <div>
+        <Link
+          href="/documentation"
+          className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
+        >
+          Documentation
+        </Link>
+
         <ThemeToggleButton />
         <ProfileSettings />
       </div>

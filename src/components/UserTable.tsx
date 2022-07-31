@@ -33,7 +33,7 @@ function TableRow(user: User) {
           {user.name}
         </IdLink>
       </td>
-      <td>{user.email}</td>
+      <td>***{/*user.email*/}</td>
     </tr>
   );
 }

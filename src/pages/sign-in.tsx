@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { BuiltInProviderType } from "next-auth/providers";
 import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from "next-auth/react";
+import Link from "next/link";
 import { Head } from "src/components/Head";
 
 /*
@@ -34,17 +35,18 @@ const Page: NextPage<Props> = ({ providers }: Props) => {
         title="Signin | Botgame"
         description="Sign in to Botgame"
         domainUrl="https://botgame.andyfx.net"
-        url="https://botgame.andyfx.net/signin"
+        url="https://botgame.andyfx.net/sign-in"
       />
-      <main className="mx-auto flex flex-col items-center justify-center h-screen p-4 bg-neutral-50">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">Sign in</h1>
-        <p className="mb-8">to Botgame</p>
+      <main className="flex items-center justify-center h-screen p-4 bg-neutral-50 dark:bg-neutral-800">
+        <div>
+          <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">Sign in</h1>
+          <p className="mb-8 text-center">to Botgame</p>
 
-        {Object.values(providers).map((provider) => (
-          <div key={provider.name}>
-            <button
-              onClick={() => signIn(provider.id)}
-              className="
+          {Object.values(providers).map((provider) => (
+            <div key={provider.name}>
+              <button
+                onClick={() => signIn(provider.id)}
+                className="
               flex bg-white items-center w-64
               justify-around p-3 text-black shadow-md m-2 
                font-medium 
@@ -52,12 +54,25 @@ const Page: NextPage<Props> = ({ providers }: Props) => {
                transition duration-100 ease-out hover:ease-in
                focus:bg-neutral-200
               "
-            >
-              <Icon name={provider.name} className="h-7 mr-2" />
-              <span>Sign in with {provider.name}</span>
-            </button>
-          </div>
-        ))}
+              >
+                <Icon name={provider.name} className="h-7 mr-2" />
+                <span>Sign in with {provider.name}</span>
+              </button>
+            </div>
+          ))}
+
+          <p className="text-sm text-center w-64 mt-3">
+            By signing in, you agree to our{" "}
+            <Link className="underline" href="/info/terms-of-service">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link className="underline" href="/info/privacy-policy">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </div>
       </main>
     </>
   );

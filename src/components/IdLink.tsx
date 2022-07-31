@@ -10,9 +10,15 @@ type Props = {
 };
 
 /**
- * essentially `<Link href={path}{hashid}/>`
+ * utility for
  *
- * Utility component. convert id to hashid.
+ * ```jsx
+ * const path = `${href}${hashid(id)}`
+ * <Link href={path}>
+ * ```
+ * use for linking to records via hashid rather than the real record id.
+ *
+ * Note: This is not a "security" thing. Its just nicer so see a link like "replay/DvzYw" instead of "replay/2"
  */
 export function IdLink({ href, id, children, className }: Props) {
   return (

@@ -32,33 +32,35 @@ const Home: NextPage<Props> = ({ bots, replays, users }) => {
         url="https://botgame.andyfx.net"
       />
       <Nav />
-      <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          C<span className="text-red-700">T3</span>A
-        </h1>
-        <p>just testing it out</p>
-        <WarningModal
-          active={open}
-          title="Delete Bot"
-          description="You will not be able to undo this."
-          confirmText="It was garbage"
-          onConfirm={() => setOpen(false)}
-          onCancel={() => setOpen(false)}
-          isLoading={false}
-        />
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore dolore deserunt rerum in praesentium saepe
-          ipsa perferendis, vel quam dignissimos reiciendis amet maxime fuga, repudiandae voluptate porro accusamus
-          laboriosam quibusdam! Soluta reprehenderit ratione ut dicta voluptatem facilis eveniet omnis molestiae,
-          sapiente distinctio sit laudantium velit iste corporis, temporibus fugiat vero.
-        </p>
+      <main className="flex justify-center p-4">
+        <div className="">
+          <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
+            bot<span className="text-blue-500">game</span>
+          </h1>
+          <p>just testing it out</p>
+          <WarningModal
+            active={open}
+            title="Delete Bot"
+            description="You will not be able to undo this."
+            confirmText="It was garbage"
+            onConfirm={() => setOpen(false)}
+            onCancel={() => setOpen(false)}
+            isLoading={false}
+          />
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore dolore deserunt rerum in praesentium saepe
+            ipsa perferendis, vel quam dignissimos reiciendis amet maxime fuga, repudiandae voluptate porro accusamus
+            laboriosam quibusdam! Soluta reprehenderit ratione ut dicta voluptatem facilis eveniet omnis molestiae,
+            sapiente distinctio sit laudantium velit iste corporis, temporibus fugiat vero.
+          </p>
 
-        <h3>users</h3>
-        <UserTable users={users} />
-        <h3>bots</h3>
-        <BotTable bots={bots} />
-        <h3>replays</h3>
-        <ReplayTable replays={replays} />
+          <h3>users</h3>
+          <UserTable users={users} />
+          <h3>bots</h3>
+          <BotTable bots={bots} />
+          <h3>replays</h3>
+          <ReplayTable replays={replays} />
+        </div>
       </main>
     </>
   );

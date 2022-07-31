@@ -1,5 +1,9 @@
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
+
+const DISCORD_INVITE_LINK = "https://discord.gg/k2Uu2MtQvr";
 
 type Props = {
   className?: string;
@@ -8,15 +12,19 @@ type Props = {
 export function ProfileSettings({ className }: Props) {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
-  if (!session) {
+  if (!session?.user) {
     return (
-      <button
+      <Link
+        href={{
+          pathname: "/sign-in",
+          query: router.pathname !== "/" ? { redirect: router.pathname } : undefined,
+        }}
         className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
-        onClick={() => signIn()}
       >
         Sign in
-      </button>
+      </Link>
     );
   }
 
@@ -26,13 +34,20 @@ export function ProfileSettings({ className }: Props) {
         className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        Username
+        {session.user.name}
       </button>
       <div className={`p-4 absolute top-12 right-0 bg-neutral-100 shadow-xl ${isOpen ? "visible" : "invisible"}`}>
         <h3>Profile</h3>
         <button className="p-2 bg-slate-100 m-2" onClick={() => {}}>
           Create bot
         </button>
+
+        <Link
+          href={DISCORD_INVITE_LINK}
+          className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
+        >
+          Join the discord
+        </Link>
 
         <div>
           <button className="p-2 bg-slate-100 m-2" onClick={() => signOut()}>

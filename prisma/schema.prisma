@@ -76,6 +76,7 @@ model Bot {
     userId    String
     replays   ReplaysOnBots[]
     botStats  BotStats?
+    rating    Rating?
 }
 
 model Replay {
@@ -105,6 +106,14 @@ model BotStats {
     losses      Int
     draws       Int
     gamesPlayed Int
+}
+
+model Rating {
+    id    Int   @id @default(autoincrement())
+    bot   Bot   @relation(fields: [botId], references: [id])
+    botId Int   @unique
+    mu    Float
+    sigma Float
 }
 
 // https://www.prisma.io/docs/concepts/components/prisma-schema/relations/one-to-one-relations

@@ -10,7 +10,7 @@ import { env } from "src/env/server.mjs";
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/signin",
+    signIn: "/sign-in",
   },
 
   callbacks: {
@@ -23,7 +23,15 @@ export const authOptions: NextAuthOptions = {
     },
     //The redirect callback is called anytime the user is redirected to a callback URL (e.g. on signin or signout).
     redirect({ url, baseUrl }) {
-      return baseUrl;
+      if (url.startsWith("/")) {
+        // Allows relative callback URLs
+        return `${baseUrl}${url}`;
+      } else if (new URL(url).origin === baseUrl) {
+        // Allows callback URLs on the same origin
+        return url;
+      } else {
+        return baseUrl;
+      }
     },
   },
   // Configure one or more authentication providers

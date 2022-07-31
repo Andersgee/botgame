@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getServerSession(req, res, nextAuthOptions);
 
   if (!session?.user?.id) {
-    res.setHeader("location", "/signin");
+    res.setHeader("location", "/sign-in");
     res.statusCode = 302;
     res.end();
     return { props: { user: null } };
