@@ -79,7 +79,7 @@ const Page: NextPage<Props> = ({ providers }: Props) => {
             </Link>
             .
           </p>
-          <p className="text-red-600">something went wrong. error: {JSON.stringify(error)}</p>
+          {error && <p className="text-red-600">something went wrong. error: {JSON.stringify(error)}</p>}
         </div>
       </main>
     </>

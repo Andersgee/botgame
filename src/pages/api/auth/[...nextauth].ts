@@ -23,6 +23,8 @@ export const authOptions: NextAuthOptions = {
     },
     //The redirect callback is called anytime the user is redirected to a callback URL (e.g. on signin or signout).
     redirect({ url, baseUrl }) {
+      return baseUrl;
+      /*
       if (url.startsWith("/")) {
         // Allows relative callback URLs
         return `${baseUrl}${url}`;
@@ -32,6 +34,7 @@ export const authOptions: NextAuthOptions = {
       } else {
         return baseUrl;
       }
+      */
     },
   },
   // Configure one or more authentication providers
