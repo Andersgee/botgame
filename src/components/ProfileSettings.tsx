@@ -19,7 +19,8 @@ export function ProfileSettings({ className }: Props) {
       <Link
         href={{
           pathname: "/sign-in",
-          query: router.pathname !== "/" ? { redirect: router.pathname } : undefined,
+          //query: router.pathname !== "/" ? { redirect: router.pathname } : undefined,
+          query: { redirect: router.pathname },
         }}
         className="justify-around p-3 font-medium hover:opacity-75 transition duration-100 ease-out hover:ease-in"
       >
