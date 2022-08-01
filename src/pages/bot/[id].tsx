@@ -7,6 +7,7 @@ import { hashidFromNumber, numberFromHashidparam } from "src/utils/hashids";
 import { FallbackPage } from "src/components/FallbackPage";
 import { ReplayTable } from "src/components/ReplayTable";
 import { inferAsyncReturnType } from "@trpc/server";
+import { IdLink } from "src/components/IdLink";
 
 async function findbot(id: number) {
   return prisma.bot.findUnique({
@@ -58,7 +59,12 @@ const Page: NextPage<Props> = ({ bot }) => {
         <div>
           <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">{bot.name}</h1>
           <p>stats and replays of bot here</p>
-          <p>creator: {bot.user.name}</p>
+          <p>
+            creator:{" "}
+            <IdLink href="/profile/" id={bot.user.intId}>
+              {bot.user.name}
+            </IdLink>
+          </p>
 
           <h2 className="text-4xl md:text-[4rem] leading-normal font-extrabold text-gray-700">Replays</h2>
           <ReplayTable replays={replays} />
