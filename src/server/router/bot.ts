@@ -34,7 +34,7 @@ export const botRouter = createRouter()
 export const protectedBotRouter = createProtectedRouter().mutation("create", {
   input: z.object({
     name: z.string().min(3),
-    bio: z.string().nullish(),
+    bio: z.string(),
   }),
   async resolve({ ctx, input }) {
     const userId = ctx.session.user.id;

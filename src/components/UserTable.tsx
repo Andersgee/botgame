@@ -19,21 +19,19 @@ export function UserTable({ className, users }: Props) {
           <th>email</th>
         </tr>
       </thead>
-      <tbody>{users.map(TableRow)}</tbody>
+      <tbody>
+        {users.map((user) => (
+          <tr key={user.id} className="border-b-2 border-neutral-500 dark:border-neutral-500">
+            <td>{user.image && <img className="w-4 h-4" src={user.image} alt={`${user.name} icon`} />}</td>
+            <td>
+              <IdLink className="hover:opacity-60" href="/profile/" id={user.intId}>
+                {user.name}
+              </IdLink>
+            </td>
+            <td>***{/*user.email*/}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
-  );
-}
-
-function TableRow(user: User) {
-  return (
-    <tr className="border-b-2 border-neutral-500 dark:border-neutral-500">
-      <td>{user.image && <img className="w-4 h-4" src={user.image} alt={`profile avatar of ${user.name}`} />}</td>
-      <td>
-        <IdLink className="hover:opacity-60" href="/profile/" id={user.intId}>
-          {user.name}
-        </IdLink>
-      </td>
-      <td>***{/*user.email*/}</td>
-    </tr>
   );
 }

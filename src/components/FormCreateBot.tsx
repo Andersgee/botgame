@@ -1,28 +1,49 @@
-import { useState } from "react";
 import { trpc } from "src/utils/trpc";
+import { z } from "zod";
+import { Formik } from "formik";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
+const zodschema_bot_create = z.object({
+  name: z.string().min(3),
+  bio: z.string(),
+});
+
+type Values = z.infer<typeof zodschema_bot_create>;
+
+const validationSchema = toFormikValidationSchema(zodschema_bot_create);
+
+const initialValues: Values = {
+  name: "",
+  bio: "",
+};
 
 type Props = {
   className?: string;
 };
 
 export function FormCreateBot({ className }: Props) {
-  const [name, setName] = useState("some botname");
-  const [bio, setBio] = useState("optional description");
+  const { mutate, isLoading } = trpc.useMutation(["protected-bot.create"]);
 
-  const { mutate: mutateBot, isLoading, data, error } = trpc.useMutation(["protected-bot.create"]);
-
-  const handleCreate = async () => {
-    mutateBot({ name, bio });
+  const onSubmit = async (values: Values) => {
+    console.log("onSubmit, values:", values);
+    mutate(values);
   };
 
   return (
-    <div className={className}>
-      {error && <div>error.message: {error.message}</div>}
-      {isLoading && <div>isLoading: {isLoading}</div>}
-      <input type="text" onChange={(e) => setName(e.target.value)} value={name} />
-      <input type="text" onChange={(e) => setBio(e.target.value)} value={bio} />
-      <button onClick={handleCreate}>Create bot</button>
-      {data && <div>{JSON.stringify(data)}</div>}
-    </div>
+    <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        <form onSubmit={handleSubmit} className={className}>
+          <input type="text" autoFocus name="name" onChange={handleChange} onBlur={handleBlur} value={values.name} />
+          {!!errors.name && !!touched.name && <span className="text-red-600">{errors.name}</span>}
+          <input type="text" name="bio" onChange={handleChange} onBlur={handleBlur} value={values.bio} />
+          {!!errors.bio && !!touched.bio && <span className="text-red-600">{errors.bio}</span>}
+          <button type="submit" disabled={isSubmitting}>
+            create
+          </button>
+          {isSubmitting && <div>formik {isSubmitting}</div>}
+          {isLoading && <div>trpc {isLoading}</div>}
+        </form>
+      )}
+    </Formik>
   );
 }

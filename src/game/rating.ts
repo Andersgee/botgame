@@ -110,7 +110,7 @@ function rate_teams_vs_teams(teamratings: DbRating[][], ranks: number[]) {
 
   return newTeamratings;
 }
-
+/*
 function testrating() {
   let res = {
     newWinner: newDbRating(),
@@ -133,3 +133,4 @@ function testrating() {
 }
 
 testrating();
+*/
