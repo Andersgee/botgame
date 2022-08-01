@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { BuiltInProviderType } from "next-auth/providers";
 import { ClientSafeProvider, getProviders, LiteralUnion, signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Head } from "src/components/Head";
 
 /*
@@ -27,6 +28,12 @@ type Props = {
 };
 
 const Page: NextPage<Props> = ({ providers }: Props) => {
+  const router = useRouter();
+  const error = router.query.error;
+
+  //console.log(error);
+  //error=OAuthAccountNotLinked
+
   if (!providers) return null;
 
   return (
@@ -72,6 +79,7 @@ const Page: NextPage<Props> = ({ providers }: Props) => {
             </Link>
             .
           </p>
+          <p className="text-red-600">something went wrong. error: {JSON.stringify(error)}</p>
         </div>
       </main>
     </>
