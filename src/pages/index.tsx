@@ -8,6 +8,7 @@ import { UserTable } from "src/components/UserTable";
 import { prisma } from "src/server/db/client";
 import { WarningModal } from "src/components/WarningModal";
 import { useState } from "react";
+import { FormCreateBot } from "src/components/FormCreateBot";
 
 type Bots = NonNullable<inferQueryOutput<"bot.get-all">>;
 type Replays = NonNullable<inferQueryOutput<"replay.get-all">>;
@@ -60,6 +61,8 @@ const Home: NextPage<Props> = ({ bots, replays, users }) => {
           <BotTable bots={bots} />
           <h3>replays</h3>
           <ReplayTable replays={replays} />
+
+          <FormCreateBot />
         </div>
       </main>
     </>

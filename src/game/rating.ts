@@ -1,5 +1,13 @@
 import { Rating, TrueSkill } from "ts-trueskill";
-//import { Gaussian } from "ts-gaussian";
+import { Rating as RatingModel } from "@prisma/client";
+
+type DbRating = Omit<RatingModel, "id" | "botId">;
+
+//import { inferQueryOutput } from "src/utils/trpc";
+
+//type DbRating = NonNullable<inferQueryOutput<"rating.get-by-id">>;
+
+//type DbRating =
 
 /**
  * trueskill environment for rating this game
@@ -31,12 +39,12 @@ function newTrueskillEnv() {
   return new TrueSkill(mu, sigma, beta, tau, drawProbability);
 }
 
-type DbRating = {
-  mu: number;
-  sigma: number;
-  /** use this as a sort key in leaderboard. */
-  exposed: number;
-};
+//type DbRating = {
+//  mu: number;
+//  sigma: number;
+//  /** use this as a sort key in leaderboard. */
+//  exposed: number;
+//};
 
 function dbratingFromRating(r: Rating): DbRating {
   return {
@@ -50,7 +58,7 @@ function ratingFromDbRating(dbrating: DbRating): Rating {
   return new Rating(dbrating.mu, dbrating.sigma);
 }
 
-function createNewDbRating() {
+export function newDbRating() {
   const env = newTrueskillEnv();
   const rating = env.createRating();
   return dbratingFromRating(rating);
@@ -105,8 +113,8 @@ function rate_teams_vs_teams(teamratings: DbRating[][], ranks: number[]) {
 
 function testrating() {
   let res = {
-    newWinner: createNewDbRating(),
-    newLoser: createNewDbRating(),
+    newWinner: newDbRating(),
+    newLoser: newDbRating(),
   };
 
   console.log("W    L");

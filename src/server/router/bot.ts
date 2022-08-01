@@ -1,5 +1,7 @@
 import { createRouter } from "./context";
-import { z } from "zod";
+import { createProtectedRouter } from "./protected-router";
+import { promise, z } from "zod";
+import { newDbRating } from "src/game/rating";
 
 export const botRouter = createRouter()
   .query("get-by-id", {
@@ -28,3 +30,41 @@ export const botRouter = createRouter()
       });
     },
   });
+
+export const protectedBotRouter = createProtectedRouter().mutation("create", {
+  input: z.object({
+    name: z.string(),
+    bio: z.string().nullish(),
+  }),
+  async resolve({ ctx, input }) {
+    const userId = ctx.session.user.id;
+
+    if (!userId || !input.bio) return null;
+
+    const bot = await ctx.prisma.bot.create({
+      data: {
+        name: input.name,
+        bio: input.bio,
+        userId: userId,
+      },
+    });
+
+    const botStats = await ctx.prisma.botStats.create({
+      data: {
+        botId: bot.id,
+        wins: 0,
+        losses: 0,
+        draws: 0,
+        gamesPlayed: 0,
+      },
+    });
+
+    const rating = await ctx.prisma.rating.create({
+      data: {
+        botId: bot.id,
+        ...newDbRating(),
+      },
+    });
+    return bot;
+  },
+});

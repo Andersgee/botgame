@@ -20,7 +20,7 @@ start
 yarn dev
 ```
 
-## database
+## dev-database
 
 inspect
 
@@ -30,11 +30,17 @@ yarn prisma studio
 pscale shell botgame dev
 ```
 
-sync database with prisma schema (run after changing prisma/schema.prisma)
+After changes to prisma/schema.prisma
 
 ```bash
-yarn prisma db push
+yarn prisma generate #"sync typescript" with prisma schema
+yarn prisma db push #"sync database" with prisma schema
 ```
+
+## prod-database
+
+on planetscale: make deploy request from dev to main and accept it.
+If there are conflics, like new required fields on tables that already have records, then... create a completely new db?
 
 ## scripts
 
@@ -44,7 +50,7 @@ yarn tsnode ./scripts/create_dummydata.ts
 
 ## TODO
 
-- [ ] create profiles
+- [ ] create bots
 - [ ] game lobby / play game functionality
 
 ## References
