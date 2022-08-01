@@ -50,7 +50,10 @@ yarn tsnode ./scripts/create_dummydata.ts
 
 ## TODO
 
-- [ ] create bots
+- [x] create bots
+- [x] require non empty string for botname.
+- [ ] add rating info to bot table
+- [ ] sign in on home should redirect to home again after.
 - [ ] game lobby / play game functionality
 
 ## References

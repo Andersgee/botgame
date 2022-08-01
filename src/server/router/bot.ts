@@ -33,7 +33,7 @@ export const botRouter = createRouter()
 
 export const protectedBotRouter = createProtectedRouter().mutation("create", {
   input: z.object({
-    name: z.string(),
+    name: z.string().min(3),
     bio: z.string().nullish(),
   }),
   async resolve({ ctx, input }) {
